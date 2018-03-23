@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: ÂÒÐò
+ * User: Ã‚Ã’ÃÃ²
  * Date: 2018/2/13
  * Time: 2:56
  */
@@ -11,5 +11,5 @@ return array(
     "dbname"=>"miaocraft",
     "charset"=>"utf8",
     "user"=>"root",
-    "password"=>"fuckall"
+    "password"=>"123456"
 );
