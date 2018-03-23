@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="zh-cn">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>喵喵出租系统</title>
+        <link rel="stylesheet" href="../static/style/font-awesome/css/font-awesome.css?ver=4.25">
+        <link rel="stylesheet" href="../static/style/skin/metro.css?ver=4.25">
+        <link rel="stylesheet" href="./public/style/common.css">
+        <link rel="stylesheet" href="./public/style/index.css">
+        <script src="./public/js/jquery-3.2.1.min.js"></script>
+        
+    </head>
+    
+    <body>
+        <div id="body">
+            <div class="menu-left">
+                <h1>管理</h1>
+                <ul class="setting">
+    				<a href="index.php?c=shop" id="member" style="position: relative;" class=""><i class="font-icon icon-group"></i>购买 / 续费</a>
+    				<a href="index.php" id="system"  class="selected" style="position: relative;"><i class="font-icon icon-cog"></i>管理服务器</a>
+    			</ul>
+            </div>
+            <div class="app-content main app-plugins">
+    			<div class="app-model app-content-box">
+    				<ul class="app-list" id="app-list" style="display: flex;">
+						<?php if($OwnServer!=false){
+							foreach($OwnServer as $Server){?>
+                		<li class="app-li ripple-item data-app shopitem" title="CPU: E5 2697v3 &#10;内存:128G" shop-id="<?php echo $Server['sid'];?>"  >
+                			<div class="flag-box">
+                			    <div class="flag bg-orange-7">ID: <?php echo $Server['server_type'].$Server['sid'];?></div>
+                			</div>
+                			<div class="icon">
+                				<img src="./public/images/<?php echo $Server['shop_server_avatar'];?>" draggable="false" style="padding-top: 10px;">
+                			</div>
+                			<div class="text">
+                				<div class="name"><?php echo $Server['shop_server_name']; ?></div>
+                				<div class="copyright">
+                				    CPU：<span class="cpu"><?php echo $Server['shop_server_core']; ?></span>核心<br>
+                				    内存：<span class="memory"><?php  echo $Server['shop_server_memory']/1024;?>G</span>
+                				</div>
+                				<div class="pay">
+                				    <span class="price"><?php if((strtotime($Server['server_end_day'])-strtotime(date("Y-m-d")))/86400>0){echo (strtotime($Server['server_end_day'])-strtotime(date("Y-m-d")))/86400 . "天";}else { echo "服务器已过期";}?></span>
+                				</div>
+                			</div>
+                			<div class="action btn-group">
+        						<button class="btn btn-sm btn-default" type="button" action="appConfig">
+        							<i class="font-icon icon-gear"></i>
+        							<span>管理服务器</span>
+        						</button>
+			                </div>
+                			<div class="progress hidden">
+                				<span class="total-size"></span>
+                				<span class="download-speed"></span>
+                				<div class="progress-bar"></div>
+                			</div>
+                		</li>
+						<?php } }?>
+            		</ul>
+    			</div>
+			<div class="app-model app-descript can-select can-right-menu hidden"></div>
+		</div>
+            <div class="main" id="main" style="display:none;">
+                <div class="h1">
+                    <i class="font-icon icon-cog"></i>服务器设置
+                </div>
+                <div class="nav">
+                	<a href="javascript:;" class="this system-setting" data-page="">服务器设置</a>
+                	<a href="javascript:;" class="setting-console" data-page="" >服务器控制台</a>
+                	<a href="javascript:;" class="setting-menu" data-page="" >菜单管理</a>
+                	<a href="javascript:;" class="setting-system-others" data-page="">其他</a>
+                	<div style="clear:both;"></div>
+                </div>
+                <div class="setting-tools-right">
+		            <span class="version-vip" id="version_vip_free">
+		                <i class="font-icon icon-key"></i><span id="ServerId"><span class="mctype"></span><span class="mcid"></span></span>
+		            </span>
+	            </div>
+	            <div class="setting-tab system-setting form-box">
+                	<div class="panel-body">
+                	    <div class="form-row">
+                			<div class="setting-title">启动 / 关闭</div>
+                			<div class="setting-content">
+                				<label>
+                					<input type="checkbox" class="kui-checkbox-ios size-big" id="switch"><em></em>
+                					<i style="width:450px;"><code>不要调戏按钮!</code></i>
+                				</label>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+                		<div class="form-row">
+                			<div class="setting-title">服务器版本</div>
+                			<div class="setting-content" style="position: relative;">
+                			    <input type="button" class="btn" style="border:1px solid #ccc;width:43%;" name="systemName" value="" id="jar">
+                			    <code>慎重选择</code>
+                				<ul class="dropdown-menu align-left" role="menu" id="jarmenu" style="position: absolute">
+                        			<!--<li><a class="jarlist firstjar">123.jar</a></li>-->
+                        		</ul>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+                		
+                		<div class="form-row">
+                			<div class="setting-title">当前在线人数</div>
+                			<div class="setting-content">
+                				<span class="price"><span class="nowplayer"></span> / <span class="maxp"></span></span>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+						<div class="form-row">
+							<div class="setting-title">TPS</div>
+							<div class="setting-content">
+								<span class="price tps">19.85</span>
+							</div>
+							<div class="clear"></div>
+						</div>
+                		<div class="form-row">
+                			<div class="setting-title">服务器名</div>
+                			<div class="setting-content">
+                				<input type="text" name="systemName" value="喵喵出租屋 QQ100981384" class="sname">
+                				<i class="desc">服务器名</i>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+                		<div class="form-row">
+                			<div class="setting-title">在线人数</div>
+                			<div class="setting-content">
+                				<input type="text"  value="25" id="mpl">
+                				<i class="desc">服务器最高在线人数</i>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+                        <div class="form-row">
+                			<div class="setting-title">服务器地址</div>
+                			<div class="setting-content">
+                				<input type="text" class="ipaddress" style="background-color: rgb(243, 243, 243)" name="systemName" value="212.244.21.233:25567" disabled="disabled">
+                				<i class="desc">进入服务器的地址</i>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+                		<div class="form-row">
+                			<div class="setting-title">内存使用率</div>
+                			<div class="setting-content setting-progress" style="width: 50%">
+                				<div class="progress progress-striped active" style="display: block;">
+                				    <div class="progress-bar" role="progressbar" style="width: 80%;"></div>
+                				</div>
+                			</div>
+							<i class="desc"><span class="resmemory">1,024 MB</span> MB / <span class="maxmemory">2,048 MB</span> MB</i>
+                			<div class="clear"></div>
+                		</div>
+
+                		<!-- 提交 -->
+                		<div class="form-row form-row-submit">
+                			<div class="setting-content">
+                				<button class="btn btn-primary setting-save">保存</button>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+	                </div>
+                </div>
+				<div class="setting-tab console form-box" style="display: none;">
+					<div class="panel-body">
+						<div class="myconsole" style="width: 100%;height: 450px;background-color: #3a3c3e;border: 0px;border-radius: 1%;overflow: auto;">
+
+						</div>
+						<div class="console-input">
+							<input type="text" style="border:2px solid skyblue;width:90%;height: 25px; margin: 3px" placeholder="在这里输入指令" id="command">
+							<input type="button" value="发送" class="btn btn-success" style="height: 18px;margin-top: -3px;width: 3.2%;" id="sendcmd">
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </body>
+<script>
+    $(function(){
+        $(".shopitem").click(function(){
+            if($(this).children(".text").children(".pay").children(".price").text()!="服务器已过期"){
+                $(".app-content").hide();
+                $.ajax({
+                    type: "post",
+                    url: "index.php?a=readServerConfig",
+                    data: {"sid": $(this).attr("shop-id")},
+                    dataType: "json",
+                    success: function (data) {
+                        if(data.switch==1){
+                            $("#switch").attr("checked",true);
+                        }else {
+                            $("#switch").attr("checked",false);
+                        }
+                        $("#switch").attr("Uname",data.uname);
+                        $(".nowplayer").text(data.player);
+                        $(".maxp").text(data.max_players);
+                        $(".tps").text(data.tps);
+                        $(".mctype").text(data.type);
+                        $(".mcid").text(data.sid);
+//					$("#ServerId").text(data.type+data.sid);
+                        $(".setting-save").attr("shop-id",data.sid);
+                        $(".sname").val(data.motd);
+                        $("#mpl").val(data.max_players);
+                        $("#jar").val(data.serverjar);
+                        $("#jar").attr("data-publish",data.jarpublish);
+//                        $(".firstjar").text(data.serverjar);
+//                        $(".firstjar").attr("data-publish",data.jarpublish);
+                        $(".ipaddress").val("43.241.48.41:"+data.port);
+                        $(".resmemory").text(data.max_memory-data.res_memory);
+                        $(".maxmemory").text(data.max_memory);
+                        var width = (1-(data.res_memory/data.max_memory))*100;
+                        $(".progress-bar").css("width",width+"%");
+                        $("#main").attr("sid",data.sid);
+                        $("#main").show();
+                    }
+                });
+                $.ajax({
+					type: "post",
+					url: "index.php?a=usablejar",
+                    data: {"sid": $(this).attr("shop-id")},
+					dataType: "json",
+					success: function(data){
+					    for(var i =0; i<data.length;i++){
+					        if(data[i].substring(data[i].length-1)==0){
+                                $(".dropdown-menu").html($(".dropdown-menu").html()+"<li class='jarli' ><a class='jarlist' title='自己文件夹下的版本' style='color:deeppink' data-publish='"+data[i].substring(data[i].length-1)+"'>"+data[i].substring(0,data[i].length-1)+"</a></li>");
+                            }else {
+                                $(".dropdown-menu").html($(".dropdown-menu").html()+"<li class='jarli'><a class='jarlist' data-publish='"+data[i].substring(data[i].length-1)+"'>"+data[i].substring(0,data[i].length-1)+"</a></li>");
+                            }
+                        }
+                        $("a.jarlist").click(function(){
+                            $("#jar").val($(this).text());
+							$("#jar").attr("data-publish",$(this).attr("data-publish"));
+                        });
+					}
+				})
+			}
+        });
+        $("#jar").click(function(){
+            $("#jarmenu").show();
+        });
+        $("#jar").blur(function(){
+            $("#jarmenu").hide(500);
+        });
+        $("#switch").click(function(){
+            $.ajax({
+                type: "post",
+                url: "index.php?a=udp",
+                data: {"ServerId":$(".mcid").text(),"ServerSwitch":$(this).is(":checked"),"Uname":$(this).attr("Uname")},
+                success: function(data){
+                    console.log(data);
+                }
+            })
+        });
+        $(".setting-save").click(function(){
+            $.ajax({
+                type: "post",
+                url: "index.php?c=shop&a=ServerConfig",
+                data: {"sname":$(".sname").val(),"playerCount":$("#mpl").val(),"jar":$("#jar").val(),"sid":$("#main").attr("sid"),"jarpublish":$("#jar").attr("data-publish")},
+                success: function(data){
+//                    console.log(data);
+//                    console.log({"sname":$(".sname").val(),"playerCount":$("#mpl").val(),"jar":$("#jar").val(),"sid":$("#main").attr("sid")});
+                    $.ajax({
+                        type: "post",
+                        url: "index.php?a=readServerConfig",
+                        data: {"sid": $(".mcid").text()},
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.switch==1){
+                                $("#switch").attr("checked",true);
+                            }else {
+                                $("#switch").attr("checked",false);
+                            }
+                            $(".nowplayer").text(data.player);
+                            $(".maxp").text(data.max_players);
+                            $(".tps").text(data.tps);
+                            $(".mctype").text(data.type);
+                            $(".mcid").text(data.sid);
+                            $("#switch").attr("Uname",data.uname);
+//					$("#ServerId").text(data.type+data.sid);
+//                            $(".firstjar").text(data.serverjar);
+                            $(".setting-save").attr("shop-id",data.sid);
+                            $(".sname").val(data.motd);
+                            $("#mpl").val(data.max_players);
+                            $("#jar").val(data.serverjar);
+                            $(".ipaddress").val("43.241.48.41:"+data.port);
+                            $(".resmemory").text(data.max_memory-data.res_memory);
+                            $(".maxmemory").text(data.max_memory);
+                            var width = (1-(data.res_memory/data.max_memory))*100;
+                            $(".progress-bar").css("width",width+"%");
+                            $("#main").attr("sid",data.sid);
+                            $("#main").show();
+                        }
+                    });
+                }
+            })
+		});
+        var ftell = 0;
+		$(".setting-console").click(function(){
+			$(".setting-tab.system-setting").hide();
+			$.ajax({
+				type: "post",
+				url: "index.php?a=readConsole",
+				data: {"sid":$("#main").attr("sid"),"ftell":0},
+				dataType: "json",
+				success: function(data){
+				    if(data.state==200){
+                        $(".myconsole").html(data.consoleMsg);
+                        $(".myconsole").scrollTop($(".myconsole").prop('scrollHeight'));
+                        var ftell = data.ftell;
+					}else {
+                        $(".myconsole").html(data.consoleMsg);
+					}
+				}
+			});
+			$(".console").show();
+		})
+        $(".system-setting").click(function(){
+            $(".setting-tab.system-setting").show();
+            $(".console").hide();
+
+		});
+		$(".nav a").click(function(){
+            $(".nav a").removeClass("this");
+            $(this).addClass("this");
+		})
+		$("#sendcmd").click(function(){
+		    if($("#command").val()!=""){
+                $.ajax({
+                    type: "post",
+                    url: "index.php?a=sendRcon",
+                    data: {"sid":$("#main").attr("sid"),"command":$("#command").val()},
+                    success: function(data){
+                        $(".myconsole").html($(".myconsole").html()+data);
+                        $(".myconsole").scrollTop($(".myconsole").prop('scrollHeight'));
+                    }
+                })
+			}
+		});
+		setInterval(function(){
+            $.ajax({
+                type: "post",
+                url: "index.php?a=readConsole",
+                data: {"sid":$("#main").attr("sid"),"ftell":ftell},
+				dataType: "json",
+                success: function(data){
+					if(data.state==200){
+//					    console.log(data);
+                        $(".myconsole").html($(".myconsole").html()+data.consoleMsg);
+//                        $(".myconsole").scrollTop($(".myconsole").prop('scrollHeight'));
+                        ftell=data.ftell;
+					}
+                }
+            })
+		},500);
+        window.document.onkeydown = disableRefresh;
+        function disableRefresh(evt){
+            evt = (evt) ? evt : window.event
+            if (evt.keyCode) {
+                if(evt.keyCode == 13){
+                    if($("#command").val()!=""){
+                        $("#sendcmd").click();
+                        $("#command").val("");
+					}
+                }
+            }
+        }
+
+})
+</script>
+
+</html>
