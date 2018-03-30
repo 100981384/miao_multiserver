@@ -1,1 +1,9 @@
-# miao_multiserver 基于kodexplorer 用户系统的 游戏服务器出租和客户管理系统
+# miao_multiserver 
+### 界面欣赏
+-----
+(https://raw.githubusercontent.com/luanluanxu/luanluanxu.github.io/master/images/1.jpg)
+(https://raw.githubusercontent.com/luanluanxu/luanluanxu.github.io/master/images/2.jpg)
+(https://raw.githubusercontent.com/luanluanxu/luanluanxu.github.io/master/images/3.jpg)
+(https://raw.githubusercontent.com/luanluanxu/luanluanxu.github.io/master/images/4.jpg)
+(https://raw.githubusercontent.com/luanluanxu/luanluanxu.github.io/master/images/5.jpg)
+(https://raw.githubusercontent.com/luanluanxu/luanluanxu.github.io/master/images/6.jpg)
