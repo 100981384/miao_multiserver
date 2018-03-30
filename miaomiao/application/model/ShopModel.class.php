@@ -45,7 +45,7 @@ class ShopModel extends Model {
         return $this->db->getAll($sql)[0];
     }
     public function addServer($shopid,$uid,$type,$endDay,$memory,$sport,$rport,$uname){
-        $sql = "INSERT INTO miao_serverinfo (shop_id,user_id,server_type,server_add_day,server_end_day,server_memory,server_port,server_rcon_port,user_name) VALUES ({$shopid},{$uid},'{$type}',now(),'{$endDay}',{$memory},{$sport},{$rport},{$uname})";
+        $sql = "INSERT INTO miao_serverinfo (shop_id,user_id,server_type,server_add_day,server_end_day,server_memory,server_port,server_rcon_port,user_name) VALUES ({$shopid},{$uid},'{$type}',now(),'{$endDay}',{$memory},{$sport},{$rport},'{$uname}')";
         $this->db->exec($sql);
         return $this->db->getInsertId();
     }

@@ -59,7 +59,7 @@ class IndexController extends Controller
     }
     public function readServerConfig(){
         $sid = $_POST['sid'];
-//        $sid = 16;
+//        $sid = 2;
         $ShopModel = new ShopModel("miao_serverinfo");
         $serverInfo = $ShopModel->getServerInfo($sid)[0];
         $user = $this->getUser();
@@ -96,7 +96,8 @@ class IndexController extends Controller
                     }
                     if (stripos($arr[$value], "max-players") !== false) {
                         //                    echo "fuck";
-                        $newarr['max_players'] = substr($arr[$value], 12) * 1;
+//                        var_dump($r);
+                        $newarr['max_players'] = substr($arr[$value], 12,strlen($arr[$value])-12);
                     }
                     if ($value == count($arr) - 1) {
                         if (stripos($configStr, "motd") === false) {
@@ -196,7 +197,7 @@ class IndexController extends Controller
                     }
                     if (stripos($arr[$value], "max-players") !== false) {
                         //                    echo "fuck";
-                        $newarr['max_players'] = substr($arr[$value], 12) * 1;
+                        $newarr['max_players'] = substr($arr[$value], 12,strlen($arr[$value])-12);
                     }
                     if ($value == count($arr) - 1) {
                         if (stripos($configStr, "motd") === false) {
@@ -338,7 +339,7 @@ class IndexController extends Controller
         if($path!="."&&$path!=".."){
             $handel = opendir($path);
             while ($resName = readdir($handel)) {
-                $resName = iconv("GBK","UTF-8",$resName);
+//                $resName = iconv("GBK","UTF-8",$resName);
                 if($resName!="."&&$resName!=".."){
                     if(is_dir($path."/".$resName)){
 

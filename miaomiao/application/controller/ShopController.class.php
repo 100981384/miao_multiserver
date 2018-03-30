@@ -33,7 +33,7 @@ class ShopController extends Controller
     }
     public function buy(){
         $shopid =  $_POST['shopid'];
-        $shopid = 2;
+//        $shopid = 2;
         $ShopModel = new ShopModel("miao_userinfo");
         $buyItem = $ShopModel->getShopInfo($shopid)[0];
         //获取用户信息
@@ -43,6 +43,8 @@ class ShopController extends Controller
         $money = $ShopModel->getUserMoney($uid)[0]['money'];
         //购买服务器的月份
         $month = $buyItem['shop_server_month'];
+//        die();
+//        var_dump($buyItem);
         if($money>=$buyItem['shop_server_price']){
             //减去所需货币
             $ShopModel->reduceMoney($buyItem['shop_server_price'],$uid);
