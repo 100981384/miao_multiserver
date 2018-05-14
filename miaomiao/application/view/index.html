@@ -33,7 +33,7 @@
                 			    <div class="flag bg-orange-7">ID: <?php echo $Server['server_type'].$Server['sid'];?></div>
                 			</div>
                 			<div class="icon">
-                				<img src="./public/images/<?php echo $Server['shop_server_avatar'];?>" draggable="false" style="padding-top: 10px;">
+                				<img src="./public/upload/<?php echo $Server['shop_server_avatar'];?>" draggable="false" style="padding-top: 10px;">
                 			</div>
                 			<div class="text">
                 				<div class="name"><?php echo $Server['shop_server_name']; ?></div>
@@ -69,8 +69,7 @@
                 <div class="nav">
                 	<a href="javascript:;" class="this system-setting" data-page="">服务器设置</a>
                 	<a href="javascript:;" class="setting-console" data-page="" >服务器控制台</a>
-                	<a href="javascript:;" class="setting-menu" data-page="" >菜单管理</a>
-                	<a href="javascript:;" class="setting-system-others" data-page="">其他</a>
+					<a href="javascript:;" class="setting-file" data-page="" >服务器文件</a>
                 	<div style="clear:both;"></div>
                 </div>
                 <div class="setting-tools-right">
@@ -171,6 +170,9 @@
 						</div>
 					</div>
 				</div>
+				<div class="setting-tab file form-box" style="display: none;">
+					<iframe id="fileiframe" src="../index.php?explorer/serverpath&path=e:/kode/data/user/admin/home/MiaoMcServer5/" width="100%" height="500px;" frameborder="0" scrolling="auto"></iframe>
+				</div>
 			</div>
         </div>
     </body>
@@ -181,15 +183,18 @@
                 $(".app-content").hide();
                 $.ajax({
                     type: "post",
-                    url: "index.php?a=readServerConfig",
+                    url: "index.php?&c=index&a=readServerConfig",
                     data: {"sid": $(this).attr("shop-id")},
                     dataType: "json",
                     success: function (data) {
+                        console.log(data);
                         if(data.switch==1){
                             $("#switch").attr("checked",true);
                         }else {
                             $("#switch").attr("checked",false);
                         }
+                        console.log($("#fileiframe"));
+						$("#fileiframe").attr("src","../index.php?explorer/serverpath&path="+data.serverpath);
                         $("#switch").attr("Uname",data.uname);
                         $(".nowplayer").text(data.player);
                         $(".maxp").text(data.max_players);
@@ -311,12 +316,18 @@
 					}
 				}
 			});
+			$(".file").hide();
 			$(".console").show();
 		})
         $(".system-setting").click(function(){
             $(".setting-tab.system-setting").show();
+            $(".file").hide();
             $(".console").hide();
-
+		});
+		$(".setting-file").click(function(){
+            $(".console").hide();
+            $(".setting-tab.system-setting").hide();
+            $(".setting-tab.file").show();
 		});
 		$(".nav a").click(function(){
             $(".nav a").removeClass("this");
@@ -349,8 +360,8 @@
                         ftell=data.ftell;
 					}
                 }
-            })
-		},500);
+            });
+		},5000);
         window.document.onkeydown = disableRefresh;
         function disableRefresh(evt){
             evt = (evt) ? evt : window.event

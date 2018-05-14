@@ -53,9 +53,9 @@ class Mysql{
     public function exec($sql){
         $this->sql = $sql;
         $result = $this->conn->exec($sql);
-
-        if (! $result) {
-            die($this->errno().':'.$this->error().'<br />出错语句为'.$sql.'<br />');
+//        echo $result;
+        if (!$result &&$result!=0) {
+            die('出错语句为'.$sql.'<br />');
         }
         return $result;
     }

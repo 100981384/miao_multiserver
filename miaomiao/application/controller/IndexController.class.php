@@ -5,18 +5,23 @@ class IndexController extends Controller
 
     public function Index(){
         $indexModel = new indexModel("miao_serverinfo");
-        $uid = $this->getUser()['userID'];
-        $OwnServer = $indexModel->showOwnServerInfo($uid);
-//        var_dump($OwnServer);
+        $user = $this->getUser();
+        $uid = $user['userID'];
+        if($this->isAdmin()==true){
+            $OwnServer = $indexModel->showAllServerInfo();
+        }else{
+            $OwnServer = $indexModel->showOwnServerInfo($uid);
+        }
         include_once(VIEW_PATH."index.html");
     }
     //UDP通信客户端
     public function udp(){
+        $this->ServerConfig($_POST['ServerId']*1);
         $msg = "{\"ServerId\":\"{$_POST['ServerId']}\",\"ServerSwitch\":{$_POST['ServerSwitch']},\"Uname\":\"{$_POST['Uname']}\"}";
-
         $this->udpGet($msg);
         echo $msg;
     }
+    //向指定服务器发送rcon指令
     public function sendRcon(){
         $sid = $_POST['sid'];
         $command = $_POST['command'];
@@ -27,17 +32,12 @@ class IndexController extends Controller
             $this->helper("MinecraftRcon");
             $rconPort = $serverInfo['server_rcon_port'];
             $password = $serverInfo['server_rcon_password'];
+            //服务器开启状态
             try{
                 $this->Rcon = new MinecraftRcon($rconPort, $password);
                 $return = $this->Rcon->sendCommand($command);
                 $returnArr = explode("\n",$return);
                 $returnstr = "";
-//                foreach ($returnArr as $item){
-//                    $patt= "{§\w{1}}";
-//                    $item = preg_replace($patt,"",$item);
-//                    $item = "<span style=\"color: lightskyblue\">$item</span>";
-//                    $returnstr .= $item."<br>";
-//                }
                 for ($i=0;$i<count($returnArr);$i++){
                     $patt= "{§\w{1}}";
                     $item = preg_replace($patt,"",$returnArr[$i]);
@@ -51,27 +51,28 @@ class IndexController extends Controller
                     echo $returnstr;
                 }
             }
+            //服务器未开启
             catch (Exception $e){
                 echo "<span class='console-time'>[喵喵出租屋] </span>你的服务器还未开启,或者正在启动中,请稍后再试<br>";
             }
 
         }
     }
+    //读取minecraft配置文件
     public function readServerConfig(){
         $sid = $_POST['sid'];
-//        $sid = 2;
         $ShopModel = new ShopModel("miao_serverinfo");
         $serverInfo = $ShopModel->getServerInfo($sid)[0];
         $user = $this->getUser();
         $type = $serverInfo['server_type'];
-        if($serverInfo['user_id']==$user['userID']) {
+        if($serverInfo['user_id']==$user['userID']||$user['role']==1) {
             $this->helper("MinecraftRcon");
             $rconPort = $serverInfo['server_rcon_port'];
             $password = $serverInfo['server_rcon_password'];
+            //服务器开启
             try {
                 $this->Rcon = new MinecraftRcon($rconPort, $password);
-                //        var_dump($this->Rcon->sendCommand("list"));
-                $uname = $user['name'];
+                $uname = $serverInfo['user_name'];
                 if ($type == "mc") {
                     $ServerName = "MiaoMcServer" . $sid;
                 }
@@ -95,8 +96,6 @@ class IndexController extends Controller
                         $newarr['motd'] = substr($str, 5);
                     }
                     if (stripos($arr[$value], "max-players") !== false) {
-                        //                    echo "fuck";
-//                        var_dump($r);
                         $newarr['max_players'] = substr($arr[$value], 12,strlen($arr[$value])-12);
                     }
                     if ($value == count($arr) - 1) {
@@ -116,25 +115,27 @@ class IndexController extends Controller
                 $newarr['tps'] = 0;
                 $newarr['uname']=$uname;
                 $newarr['jarpublish']=$serverInfo['server_publishjar'];
+                if($user['role']==1){
+                    $newarr['serverpath'] = str_ireplace("\\","/",SETUP_PATH."data/User/$uname/home/$ServerName/");
+                }else {
+                    $newarr['serverpath'] = str_ireplace("\\","/","/$ServerName/");
+                }
 
                 $player = $this->Rcon->sendCommand("list");
-//                echo 233;
-                //        var_dump($player);
-                //        var_dump($this->Rcon->sendCommand("list"));
                 //指令发送成功
                 if ($player == true) {
                     if (stripos($player, "/") == true) {
                         //初始客户端
                         $sub = stripos($player, "/");
                         $endstr = substr($player, $sub - 1);
-                        $end = stripos($endstr, " ");
-                        $newarr['player'] = substr($player, $sub - 1, $end) * 1;
+                        $end = stripos($endstr, "/");
+                        $newarr['player'] = substr($player, $sub - 1, $end)*1;
+
                     } else if (stripos($player, "§c") == true) {
 
                         //essentials
                         $sub = stripos($player, " §c");
                         $endstr = stripos($player, "§6 ");
-                        //                    echo $endstr;
                         $newarr['player'] = substr($player, $sub + 4, $endstr - $sub - 4) * 1;
                     } else {
                         $newarr['player'] = 0;
@@ -146,7 +147,6 @@ class IndexController extends Controller
                     $arr = explode("\n", $memory);
                     $sub = stripos($arr[1], "§a");
                     $newarr['tps'] = substr($arr[1], $sub + 3);
-                    //            var_dump($arr[2]);
                     $sub = stripos($arr[2], "§c");
 
                     $str = substr($arr[2], $sub + 3, -4);
@@ -172,8 +172,9 @@ class IndexController extends Controller
                     $newarr['res_memory'] = $newarr['max_memory'];
                 }
             }
+            //服务器未开启
             catch(Exception $e){
-                $uname = $user['name'];
+                $uname = $serverInfo['user_name'];
                 if ($type == "mc") {
                     $ServerName = "MiaoMcServer" . $sid;
                 }
@@ -220,18 +221,20 @@ class IndexController extends Controller
                 $newarr['runing_time']="服务器未开启";
                 $newarr['uname']=$uname;
                 $newarr['jarpublish']=$serverInfo['server_publishjar'];
-//                $newarr['']
-//                var_dump($newarr);
+                if($user['role']==1){
+                    $newarr['serverpath'] = str_ireplace("\\","/",SETUP_PATH."data/User/$uname/home/$ServerName/");
+                }else {
+                    $newarr['serverpath'] = str_ireplace("\\","/","/$ServerName/");
+                }
+
                 exit(json_encode($newarr));
             }
             exit(json_encode($newarr));
-//            var_dump($newarr);
     }
 }
+//读取lastet.log文件
     public function readConsole(){
-//        header("Content-Type: text/html;charset=gb2312");
         $sid = $_POST['sid'];
-//        $sid = 16;
         $ShopModel = new ShopModel("miao_serverinfo");
         $serverInfo = $ShopModel->getServerInfo($sid)[0];
         $user = $this->getUser();
@@ -251,7 +254,6 @@ class IndexController extends Controller
                         fseek($handel,$_POST['ftell']);
                     }
                     while(!feof($handel)){
-//                        echo 233;
                         $str = fgets($handel);
                         $str = str_replace("[Server thread/INFO]",iconv("UTF-8","GBK","[服务器信息]"),$str);
                         $patt = "{\[RCON Listener #1/INFO\].+}";
@@ -274,20 +276,10 @@ class IndexController extends Controller
                             $html .= iconv("GBK","UTF-8",$item)."<br>";
                         }
                     }
-//                    for ($i=0;$i<count($arr);$i++){
-//                        if($arr[$i]!="</span>&nbsp;"){
-//                            if($arr[$i]!=count($arr)-1){
-//                                $html .= $arr[$i]."<br>";
-//                            }else{
-//                                $html .= $arr[$i];
-//                            }
-//                        }
-//                    }
                     $returnarr = array(
                         "state"=>200,
                         "ftell"=>ftell($handel),
                         "consoleMsg"=>$html);
-//                    var_dump($returnarr);
                 }else {
                     $html =  "<br><br><br><br><br><br><br><br><br><br><br><h3><span class='console-time'>[喵喵出租屋]</span> 你至少开启一次服务器才能使用控制台，请稍后刷新</h3>";
                     $returnarr = array(
@@ -300,15 +292,13 @@ class IndexController extends Controller
                 mkdir($path."logs");
                 header("location: index.php");
             }
-//            echo 23;
-//            print_r($returnarr);
             header("Content-Type:text/html; charset=utf-8");
             echo json_encode($returnarr);
         }
     }
+    //获取能够使用的jar包
     public function usablejar(){
         $sid = $_POST['sid'];
-//        $sid = 1;
         $ShopModel = new ShopModel("miao_serverinfo");
         $serverInfo = $ShopModel->getServerInfo($sid)[0];
         $user = $this->getUser();
@@ -326,20 +316,18 @@ class IndexController extends Controller
             $sub = substr($item,-1);
             $item =  iconv("UTF-8","GBK",substr($item,0,-1));
             if(filesize($item)>=10485760){
-//                $sub = strripos("\\",iconv("GBK","UTF-8",$item.$sub));
                 $poi = strripos($item,"\\");
                 $item = iconv("GBK","UTF-8",$item.$sub);
                 $newarr[] = substr($item,$poi+1);;
             }
         }
-//        var_dump($newarr);
         echo json_encode($newarr);
     }
+    //读取文件
     private function readFile($path,&$arr,$sub){
         if($path!="."&&$path!=".."){
             $handel = opendir($path);
             while ($resName = readdir($handel)) {
-//                $resName = iconv("GBK","UTF-8",$resName);
                 if($resName!="."&&$resName!=".."){
                     if(is_dir($path."/".$resName)){
 

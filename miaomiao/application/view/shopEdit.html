@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="zh-cn">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>编辑服务器</title>
+        <link rel="stylesheet" href="../static/style/font-awesome/css/font-awesome.css?ver=4.25">
+        <link rel="stylesheet" href="../static/style/skin/metro.css?ver=4.25">
+        <link rel="stylesheet" href="./public/style/common.css">
+        <link rel="stylesheet" href="./public/style/index.css">
+		<script src="./public/js/jquery-3.2.1.min.js"></script>
+    </head>
+    
+    <body>
+        <div id="body">
+            <div class="menu-left">
+                <h1>编辑</h1>
+                <ul class="setting">
+    				<a href="index.php?c=shopManage&a=add" id="member" draggable="false"  style="position: relative;"><i class="font-icon icon-group"></i>添加商品</a>
+    				<a href="index.php?c=shopManage&a=edit" id="system" draggable="false"  class="selected" style="position: relative;"><i class="font-icon icon-cog"></i>修改商品</a>
+    			</ul>
+            </div>
+            <div class="main" id="main" style="display: none;">
+                <div class="h1">
+                    <i class="font-icon icon-cog"></i>修改商品
+                </div>
+                <div class="nav">
+                    <a href="javascript:;" class="this system-setting" data-page="">修改商品</a>
+                    <div style="clear:both;"></div>
+                </div>
+                <form action="index.php?c=shopManage&a=modifyGoods" method="post">
+                    <div class="setting-tab system-setting form-box">
+                        <div class="panel-body">
+                            <div class="form-row">
+                                <div class="setting-title">是否上架</div>
+                                <div class="setting-content">
+                                    <label>
+                                        <input type="checkbox" class="kui-checkbox-ios size-big" id="switch" name="switch[]"><em></em>
+                                    </label>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <form action="" id="img-form" enctype="multipart/form-data">
+                                <div class="form-row">
+                                    <div class="setting-title">商品图片</div>
+                                    <div class="setting-content" style="position: relative;">
+                                        <input type="file" class="btn" style="border:1px solid #ccc;width:43%;" value="1.jpg" id="img">
+                                        <input type="hidden" name="img" value="1.jpg" id="real-img">
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </form>
+                            <input type="hidden" name="shopid" value="" id="shopid">
+                            <div class="form-row">
+                                <div class="setting-title">商品类型</div>
+                                <div class="setting-content" style="position: relative;">
+                                    <input type="button" class="btn" style="border:1px solid #ccc;width:43%;"  value="mc" id="type" >
+                                    <ul class="dropdown-menu align-left" role="menu" id="jarmenu" style="position: absolute">
+                                        <li><a class="jarlist">mc</a></li>
+                                        <li><a class="jarlist">unturned</a></li>
+                                    </ul>
+                                    <input type="hidden" name="type" value="mc" id="real-type">
+                                    <i class="desc">商品类型</i>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="setting-title">商品名</div>
+                                <div class="setting-content">
+                                    <input type="text" name="goodsName" value="新手套餐" class="sname">
+                                    <i class="desc">商品名</i>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="setting-title">标签名</div>
+                                <div class="setting-content">
+                                    <input type="text"  value="优惠25%" id="tag-name" name="tag">
+                                    <i class="desc">4个字以内</i>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="setting-title">CPU核心</div>
+                                <div class="setting-content">
+                                    <input type="text" name="core" value="24" id="core">
+                                    <i class="desc">显示的CPU核心</i>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="setting-title">服务器内存</div>
+                                <div class="setting-content">
+                                    <input type="text" name="memory" value="1024" id="memory">
+                                    <i class="desc">以mb为单位,1024为1G</i>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="setting-title">套餐时长</div>
+                                <div class="setting-content">
+                                    <input type="text" name="month" value="1" id="month">
+                                    <i class="desc">月为单位,12为1年</i>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="setting-title">商品价格</div>
+                                <div class="setting-content">
+                                    <input type="text" name="price" value="100" id="price">
+                                    <i class="desc">价格</i>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+
+                            <!-- 提交 -->
+                            <div class="form-row form-row-submit">
+                                <div class="setting-content">
+                                    <button class="btn btn-primary setting-save" id="modify">修改</button>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div id="uuid_1521273415_1213" class="tips-box error" style="display: none;left: 45%; opacity: 1; top: 25%;"><i class="tips-icon"></i><div class="tips-msg"><p>上传失败</p></div><a class="tips-close">×</a><div style="clear:both"></div></div>
+            </div>
+            <div class="app-content main app-plugins" id="shop">
+    			<div class="app-model app-content-box">
+    				<ul class="app-list" id="app-list" style="display: flex;">
+						<?php foreach ($shopInfo as $shop) {?>
+                		<li class="app-li ripple-item data-app" title="CPU: E5 2697v3&#10;内存:128G" id="app-li">
+                			<div class="flag-box">
+                			    <div class="flag bg-orange-7"><?php echo $shop['shop_server_tag']; ?></div>
+                			</div>
+                			<div class="icon">
+                				<img src="./public/upload/<?php echo $shop['shop_server_avatar']; ?>" draggable="false" style="padding-top: 10px;">
+                			</div>
+                			<div class="text">
+                				<div class="name"><?php echo $shop['shop_server_name']; ?></div>
+                				<div class="copyright">
+                				    CPU：<span class="cpu"><?php echo $shop['shop_server_core']; ?></span>核心<br>
+                				    内存：<span class="memory"><?php echo $shop['shop_server_memory']/1024; ?>G</span>
+                				</div>
+                				<div class="pay">
+                				    <span class="price"><?php echo $shop['shop_server_price']; ?></span><span class="price-name"> 颗猫粮 / <span class="price"><?php if($shop['shop_server_month']==1){echo "月";}else if($shop['shop_server_month']==6){echo "半年";}else if($shop['shop_server_month']==12){echo "年";}?></span></span>
+                				</div>
+                			</div>
+                			<div class="action btn-group">
+								<button class="btn btn-sm btn-default modifyGoods" type="button" style="width: 105px !important;"  sid="<?php echo $shop['shopid']; ?>">
+									<i class="font-icon icon-gear"></i>
+									<span>修改服务器</span>
+								</button>
+                                <button class="btn btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="width:20px !important;">
+                                    <span class="caret"></span><span class="sr-only"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="upgoods" shopid="<?php echo $shop['shopid']; ?>"><a><i class="font-icon icon-plus"></i>上架</a></li>
+                                    <li class="downgoods" shopid="<?php echo $shop['shopid']; ?>"><a><i class="font-icon icon-ban-circle"></i>下架</a></li>
+                                    <li class="deletegoods" shopid="<?php echo $shop['shopid']; ?>"><a><i class="font-icon icon-trash"></i>删除</a></li>
+                                </ul>
+                			</div>
+                			<div class="progress hidden">
+                				<span class="total-size"></span>
+                				<span class="download-speed"></span>
+                				<div class="progress-bar"></div>
+                			</div>
+                		</li>
+						<?php } ?>
+            		</ul>
+    			</div>
+				<div id="confirm"  class="dialog-path-remove artDialog undefined aui-state-lock aui-state-focus aui-state-drag" style="display:none;position: absolute;left: 25%;top: 25%;width: auto;z-index: 312;min-width: 340px;"><div class="aui-outer"><div class="aui-mask"></div><table class="aui-border"><tbody><tr><td class="aui-nw"></td><td class="aui-n"></td><td class="aui-ne"></td></tr><tr><td class="aui-w"></td><td class="aui-c"><div class="aui-inner"><table class="aui-dialog"><tbody><tr><td colspan="2" class="aui-header"><div class="aui-title-bar dialog-menu" id="dialog-path-remove"><div class="aui-title" style="cursor: move;"><img src="../static/images/file_icon/icon_others/info.png" draggable="false" ondragstart="return false;">确认购买？</div><a class="aui-min"></a><a class="aui-max"></a><a class="aui-close"></a></div></td></tr><tr><td class="aui-icon"><div class="aui-icon-bg" style="background-image: url(&quot;http://kode.miaocraft.com/static/js/lib/artDialog/icons/question.png&quot;); background-repeat: no-repeat; background-position: center center;"></div></td><td class="aui-main" style="padding: 40px; width: auto; height: auto;"><div class="aui-content"><div style="width:200px" class="can-select" id="confirmText">您确定要花50颗猫粮购买套餐吗？</div></div></td></tr><tr><td colspan="2" class="aui-footer"><div class="aui-buttons"><button class="aui-state-highlight" type="button">确定</button><button type="button" id="cancel">取消</button></div></td></tr></tbody></table></div></td><td class="aui-e"></td></tr><tr><td class="aui-sw"></td><td class="aui-s"></td><td class="aui-se"></td></tr></tbody></table><div class="resize-handle resize-top" resize="top"></div><div class="resize-handle resize-right" resize="right"></div><div class="resize-handle resize-bottom" resize="bottom"></div><div class="resize-handle resize-left" resize="left"></div><div class="resize-handle resize-top-right" resize="top-right"></div><div class="resize-handle resize-bottom-right" resize="bottom-right"></div><div class="resize-handle resize-bottom-left" resize="bottom-left"></div><div class="resize-handle resize-top-left" resize="top-left"></div></div></div>
+				<div id="uuid_1521273415_1213" class="tips-box error" style="display: none;left: 45%; opacity: 1; top: 25%;"><i class="tips-icon"></i><div class="tips-msg"><p id="errormsg">失败</p></div><a class="tips-close">×</a><div style="clear:both"></div></div>
+				<div id="uuid_1521273415_1214" class="tips-box success" style="display: none;left: 45%; opacity: 1; top: 25%;"><i class="tips-icon"></i><div class="tips-msg"><p id="successmsg">成功！</p></div><a class="tips-close">×</a><div style="clear:both"></div></div>
+
+				<div class="app-model app-descript can-select can-right-menu hidden"></div>
+		</div>
+        </div>
+<script>
+	$(function(){
+		$(".dropdown-toggle").click(function(){
+		    $(this).siblings(".dropdown-menu").toggle();
+        });
+        $("#img").on("change",function(){
+            var img = $("#img")[0].files[0];
+            var formData = new FormData();
+            formData.append("img",img);
+            $.ajax({
+                "url":"index.php?c=shopManage&a=upImg",
+                "type":"post",
+                "contentType":false,
+                "async":false,
+                "processData":false,
+                "data":formData,
+                success:function(data){
+                    console.log(data);
+                    if(data!="false"){
+                        $("#real-img").val(data);
+                    }else {
+                        $(".tips-box.error").show(1000);
+                        setTimeout(function(){$(".tips-box.error").hide(1000)},3000);
+                    }
+                }
+            });
+        });
+        $("a.jarlist").click(function(){
+            $("#type").val($(this).text());
+            $("#real-type").val($(this).text());
+        });
+        $("#type").click(function(){
+            $("#jarmenu").show();
+        });
+        $("#type").blur(function(){
+            $("#jarmenu").hide(500);
+        });
+		$(".modifyGoods").click(function(){
+		    $.ajax({
+                "url":"index.php?c=ShopManage&a=getGoodsInfo",
+                "type":"get",
+                "data":{"sid":$(this).attr("sid")},
+                "dataType":"json",
+                success:function(data){
+                    console.log(data);
+                    if(data.shop_is_sale!=0){
+                        $("#switch").attr("checked",true);
+                    }else{
+                        $("#switch").attr("checked",false);
+                    }
+                    $("#real-img").val(data.shop_server_avatar);
+                    $("#type").val(data.shop_server_type);
+                    $(".sname").val(data.shop_server_name);
+                    $("#tag-name").val(data.shop_server_tag);
+                    $("#core").val(data.shop_server_core);
+                    $("#memory").val(data.shop_server_memory);
+                    $("#month").val(data.shop_server_month);
+                    $("#price").val(data.shop_server_price);
+                    $("#shopid").val(data.shopid);
+                    $("#main").show();
+                    $("#shop").hide();
+                }
+            })
+        });
+		$(".upgoods").click(function(){
+            $.ajax({
+                "url":"index.php?c=shopManage&a=upDownGoods",
+                "type":"post",
+                "data":{"shopid":$(this).attr("shopid"),"switch":1},
+                success:function(data){
+                    if(data=="true"){
+                        $("#successmsg").text("上架成功");
+                        $(".tips-box.success").show(1000);
+                        setTimeout(function(){$(".tips-box.success").hide(1000)},2000);
+                    }
+                }
+            })
+        })
+        $(".downgoods").click(function(){
+            $.ajax({
+                "url":"index.php?c=shopManage&a=upDownGoods",
+                "type":"post",
+                "data":{"shopid":$(this).attr("shopid"),"switch":0},
+                success:function(data){
+                    if(data=="true"){
+                        $("#successmsg").text("下架成功");
+                        $(".tips-box.success").show(1000);
+                        setTimeout(function(){$(".tips-box.success").hide(1000)},2000);
+                    }
+                }
+            })
+        });
+        $(".deletegoods").click(function(){
+           var deletegoods = $(this);
+            $.ajax({
+                "url":"index.php?c=shopManage&a=deleteGoods",
+                "type":"post",
+                "data":{"shopid":$(this).attr("shopid")},
+                success:function(data){
+                    if(data=="true"){
+                        $(deletegoods).parents(".app-li").remove();
+                        $("#successmsg").text("删除成功");
+                        $(".tips-box.success").show(1000);
+                        setTimeout(function(){$(".tips-box.success").hide(1000)},2000);
+
+                    }
+                }
+            })
+        })
+
+	})
+</script>
+    </body>
+</html>

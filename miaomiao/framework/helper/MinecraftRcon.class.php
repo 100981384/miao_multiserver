@@ -1,6 +1,6 @@
 <?php
-	    require HELPER_PATH.'/SourceQuery/bootstrap.php';
-        use xPaw\SourceQuery\SourceQuery;
+    require HELPER_PATH.'/SourceQuery/bootstrap.php';
+    use xPaw\SourceQuery\SourceQuery;
 	class MinecraftRcon {
 	    private $Query;
         public function __construct($port,$password)

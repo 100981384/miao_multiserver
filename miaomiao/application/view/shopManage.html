@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-cn">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>喵喵出租系统</title>
+        <link rel="stylesheet" href="../static/style/font-awesome/css/font-awesome.css?ver=4.25">
+        <link rel="stylesheet" href="../static/style/skin/metro.css?ver=4.25">
+        <link rel="stylesheet" href="./public/style/common.css">
+        <link rel="stylesheet" href="./public/style/index.css">
+        <script src="./public/js/jquery-3.2.1.min.js"></script>
+        
+    </head>
+    
+    <body>
+        <div id="body">
+            <div class="menu-left">
+                <h1>添加</h1>
+                <ul class="setting">
+    				<a href="index.php?c=shopManage&a=add" id="member" class="selected" style="position: relative;" class=""><i class="font-icon icon-group"></i>添加商品</a>
+    				<a href="index.php?c=shopManage&a=edit" id="system"   style="position: relative;"><i class="font-icon icon-cog"></i>修改商品</a>
+    			</ul>
+            </div>
+            <div class="main" id="main">
+                <div class="h1">
+                    <i class="font-icon icon-cog"></i>添加商品
+                </div>
+                <div class="nav">
+                	<a href="javascript:;" class="this system-setting" data-page="">添加商品</a>
+                	<div style="clear:both;"></div>
+                </div>
+				<form action="index.php?c=shopManage&a=addGoods" method="post">
+	            <div class="setting-tab system-setting form-box">
+                	<div class="panel-body">                	   
+						<div class="form-row">
+                			<div class="setting-title">是否上架</div>
+                			<div class="setting-content">
+                				<label>
+                					<input type="checkbox" class="kui-checkbox-ios size-big" id="switch" name="switch[]"><em></em>
+                				</label>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+						<form action="" id="img-form" enctype="multipart/form-data">
+						<div class="form-row">
+							<div class="setting-title">商品图片</div>
+							<div class="setting-content" style="position: relative;">
+								<input type="file" class="btn" style="border:1px solid #ccc;width:43%;" value="1.jpg" id="img">
+								<input type="hidden" name="img" value="1.jpg" id="real-img">
+							</div>
+							<div class="clear"></div>
+						</div>
+						</form>
+                		<div class="form-row">
+                			<div class="setting-title">商品类型</div>
+                			<div class="setting-content" style="position: relative;">
+                			    <input type="button" class="btn" style="border:1px solid #ccc;width:43%;"  value="mc" id="type" >
+								<ul class="dropdown-menu align-left" role="menu" id="jarmenu" style="position: absolute">
+									<li><a class="jarlist">mc</a></li>
+									<li><a class="jarlist">unturned</a></li>
+								</ul>
+								<input type="hidden" name="type" value="mc" id="real-type">
+								<i class="desc">商品类型</i>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+                		<div class="form-row">
+                			<div class="setting-title">商品名</div>
+                			<div class="setting-content">
+                				<input type="text" name="goodsName" value="新手套餐" class="sname">
+                				<i class="desc">商品名</i>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+                		<div class="form-row">
+                			<div class="setting-title">标签名</div>
+                			<div class="setting-content">
+                				<input type="text"  value="优惠25%" id="tag-name" name="tag">
+                				<i class="desc">4个字以内</i>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+                        <div class="form-row">
+                			<div class="setting-title">CPU核心</div>
+                			<div class="setting-content">
+                				<input type="text" name="core" value="24">
+                				<i class="desc">显示的CPU核心</i>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+						<div class="form-row">
+							<div class="setting-title">服务器内存</div>
+							<div class="setting-content">
+								<input type="text" name="memory" value="1024">
+								<i class="desc">以mb为单位,1024为1G</i>
+							</div>
+							<div class="clear"></div>
+						</div>
+
+						<div class="form-row">
+							<div class="setting-title">套餐时长</div>
+							<div class="setting-content">
+								<input type="text" name="month" value="1">
+								<i class="desc">月为单位,12为1年</i>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="form-row">
+							<div class="setting-title">商品价格</div>
+							<div class="setting-content">
+								<input type="text" name="price" value="100">
+								<i class="desc">价格</i>
+							</div>
+							<div class="clear"></div>
+						</div>
+
+                		<!-- 提交 -->
+                		<div class="form-row form-row-submit">
+                			<div class="setting-content">
+                				<button class="btn btn-primary setting-save">添加</button>
+                			</div>
+                			<div class="clear"></div>
+                		</div>
+	                </div>
+                </div>
+				</form>
+				<div id="uuid_1521273415_1213" class="tips-box error" style="display: none;left: 45%; opacity: 1; top: 25%;"><i class="tips-icon"></i><div class="tips-msg"><p>上传失败</p></div><a class="tips-close">×</a><div style="clear:both"></div></div>
+			</div>
+        </div>
+    </body>
+<script>
+    $(function(){
+        $("#switch").click(function(){
+            console.log($(this).is(":checked"));
+		})
+        $("a.jarlist").click(function(){
+            $("#type").val($(this).text());
+            $("#real-type").val($(this).text());
+        });
+        $("#type").click(function(){
+            $("#jarmenu").show();
+        });
+        $("#type").blur(function(){
+            $("#jarmenu").hide(500);
+        });
+        $("#img").on("change",function(){
+            var img = $("#img")[0].files[0];
+            var formData = new FormData();
+            formData.append("img",img);
+            $.ajax({
+                "url":"index.php?c=shopManage&a=upImg",
+                "type":"post",
+				"contentType":false,
+				"async":false,
+				"processData":false,
+                "data":formData,
+                success:function(data){
+                    console.log(data);
+                    if(data!="false"){
+                        $("#real-img").val(data);
+					}else {
+                        $(".tips-box.error").show(1000);
+                        setTimeout(function(){$(".tips-box.error").hide(1000)},3000);
+					}
+                }
+            });
+		})
+})
+</script>
+
+</html>

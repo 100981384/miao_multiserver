@@ -11,5 +11,5 @@ return array(
     "dbname"=>"miaocraft",
     "charset"=>"utf8",
     "user"=>"root",
-    "password"=>"secret"
+    "password"=>"beblog"
 );

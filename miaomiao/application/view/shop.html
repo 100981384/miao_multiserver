@@ -28,13 +28,13 @@
     				    &nbsp;&nbsp;<i class="font-icon icon-yen"></i>余额: <span class="price" id="price"><?php echo $money; ?></span> <span>颗猫粮</span>&nbsp;&nbsp;<button class="btn btn-success">购买猫粮</button>
     				</div>
     				<ul class="app-list" id="app-list" style="display: flex;">
-						<?php foreach ($shopInfo as $shop) {?>
+						<?php if($shopInfo!=null){foreach ($shopInfo as $shop) {?>
                 		<li class="app-li ripple-item data-app" title="CPU: E5 2697v3&#10;内存:128G" >
                 			<div class="flag-box">
                 			    <div class="flag bg-orange-7"><?php echo $shop['shop_server_tag']; ?></div>
                 			</div>
                 			<div class="icon">
-                				<img src="./public/images/<?php echo $shop['shop_server_avatar']; ?>" draggable="false" style="padding-top: 10px;">
+                				<img src="./public/upload/<?php echo $shop['shop_server_avatar']; ?>" draggable="false" style="padding-top: 10px;">
                 			</div>
                 			<div class="text">
                 				<div class="name"><?php echo $shop['shop_server_name']; ?></div>
@@ -57,7 +57,7 @@
                 				<div class="progress-bar"></div>
                 			</div>
                 		</li>
-						<?php } ?>
+						<?php }}else { echo "<h1>暂时还没有商品上架</h1>";} ?>
             		</ul>
     			</div>
 				<div id="confirm"  class="dialog-path-remove artDialog undefined aui-state-lock aui-state-focus aui-state-drag" style="display:none;position: absolute;left: 25%;top: 25%;width: auto;z-index: 312;min-width: 340px;"><div class="aui-outer"><div class="aui-mask"></div><table class="aui-border"><tbody><tr><td class="aui-nw"></td><td class="aui-n"></td><td class="aui-ne"></td></tr><tr><td class="aui-w"></td><td class="aui-c"><div class="aui-inner"><table class="aui-dialog"><tbody><tr><td colspan="2" class="aui-header"><div class="aui-title-bar dialog-menu" id="dialog-path-remove"><div class="aui-title" style="cursor: move;"><img src="../static/images/file_icon/icon_others/info.png" draggable="false" ondragstart="return false;">确认购买？</div><a class="aui-min"></a><a class="aui-max"></a><a class="aui-close"></a></div></td></tr><tr><td class="aui-icon"><div class="aui-icon-bg" style="background-image: url(&quot;http://kode.miaocraft.com/static/js/lib/artDialog/icons/question.png&quot;); background-repeat: no-repeat; background-position: center center;"></div></td><td class="aui-main" style="padding: 40px; width: auto; height: auto;"><div class="aui-content"><div style="width:200px" class="can-select" id="confirmText">您确定要花50颗猫粮购买套餐吗？</div></div></td></tr><tr><td colspan="2" class="aui-footer"><div class="aui-buttons"><button class="aui-state-highlight" type="button">确定</button><button type="button" id="cancel">取消</button></div></td></tr></tbody></table></div></td><td class="aui-e"></td></tr><tr><td class="aui-sw"></td><td class="aui-s"></td><td class="aui-se"></td></tr></tbody></table><div class="resize-handle resize-top" resize="top"></div><div class="resize-handle resize-right" resize="right"></div><div class="resize-handle resize-bottom" resize="bottom"></div><div class="resize-handle resize-left" resize="left"></div><div class="resize-handle resize-top-right" resize="top-right"></div><div class="resize-handle resize-bottom-right" resize="bottom-right"></div><div class="resize-handle resize-bottom-left" resize="bottom-left"></div><div class="resize-handle resize-top-left" resize="top-left"></div></div></div>
@@ -65,6 +65,7 @@
 				<div id="uuid_1521273415_1214" class="tips-box success" style="display: none;left: 45%; opacity: 1; top: 25%;"><i class="tips-icon"></i><div class="tips-msg"><p>购买成功！</p></div><a class="tips-close">×</a><div style="clear:both"></div></div>
 
 				<div class="app-model app-descript can-select can-right-menu hidden"></div>
+		</div>
 		</div>
 <script>
 	$(function(){
@@ -109,5 +110,5 @@
 
 	})
 </script>
-    </body>
+		</body>
 </html>
